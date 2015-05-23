@@ -1,6 +1,6 @@
 'use strict';
-
-angular.module('myApp.view1', ['ngRoute'])
+moduleList.push('view1');
+angular.module('view1', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/view1', {
@@ -10,7 +10,5 @@ angular.module('myApp.view1', ['ngRoute'])
 }])
 
 .controller('View1Ctrl', [function() {
-    $scope.$on("$routeChangeSuccess", function (scope, next, current) {
-        $scope.transitionState = "active"
-    });
+
 }]);

@@ -1,16 +1,72 @@
 /* app css stylesheet */
+body{
+  padding:0px;
+  margin:0px;
+}
+
+a{
+  text-decoration:none;
+}
+
+a{
+  color:blue;
+}
+
+.menu-button, .header-bar{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.menu-button{
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
 
 .menu {
   list-style: none;
-  border-bottom: 0.1em solid black;
   margin-bottom: 2em;
-  padding: 0 0 0.5em;
+  padding:1em;
 }
 
 .menu > li {
+  padding:1em;
 }
 
 .menu > li:nth-child(1):before {
   content: "";
   padding: 0;
+}
+
+#header-bar{
+  background:yellow;
+  padding-top:4px;
+  padding-bottom:4px;
+  position:fixed;
+  top:0px;
+  left:0px;
+  width:100%;
+  margin:0px;
+  height:25px;
+  z-index: 300;
+}
+#nav-view{
+  margin-top:33px;
+}
+
+#slide-nav{
+  z-index: 400;
+  position:fixed;
+  top:0px;
+  width:200px;
+  background:green;
+}
+
+.header-value{
+  float:right;
+  padding-right:1em;
 }

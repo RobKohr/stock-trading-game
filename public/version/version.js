@@ -1,6 +1,6 @@
 'use strict';
-
-angular.module('myApp.version', [
+moduleList.push('version');
+angular.module('version', [
   'myApp.version.interpolate-filter',
   'myApp.version.version-directive'
 ])

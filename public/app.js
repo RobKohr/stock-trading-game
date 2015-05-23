@@ -1,12 +1,27 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('myApp', [
-  'ngRoute',
-  'myApp.view1',
-  'myApp.view2',
-  'myApp.version'
-]).
+angular.module('myApp', moduleList).
+
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/view1'});
-}]);
+  $routeProvider.otherwise({redirectTo: '/home'});
+}]).
+
+controller('BodyCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
+ 	$('body').show();
+}]).
+
+filter('commaNumber', function () {
+
+  return function (input) {
+    return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+}).
+filter('floor', function () {
+
+  return function (input) {
+    return Math.floor(input);
+  };
+
+});
