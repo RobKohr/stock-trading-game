@@ -1,0 +1,2 @@
+3 different stock price sources:
+curl -s 'http://download.finance.yahoo.com/d/quotes.csv?s=aapl&f=l1'; curl -s 'https://finance.google.com/finance/info?client=ig&q=AAPL'; curl -s 'http://dev.markitondemand.com/Api/v2/Quote/jsonp?symbol=AAPL'
