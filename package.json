@@ -1,37 +1,78 @@
 {
-  "name": "application-name",
+  "name": "stock-trading-game",
+  "display-name": "Stock Trading Game",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "bcrypt": "^0.8.3",
     "body-parser": "^1.0.2",
+    "bower": "^1.4.1",
+    "ejs": "^2.3.1",
+    "email-templates": "^2.0.0-beta.1",
     "error-handler": "^0.1.4",
     "errorhandler": "^1.3.6",
     "express": "~4.1.1",
+    "express-session": "^1.11.2",
+    "grunt": "^0.4.5",
     "jade": "~0.31.2",
+    "jasmine": "^2.3.1",
+    "jasmine-runner": "^0.2.9",
+    "karma": "^0.12.37",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-jasmine": "^0.3.5",
+    "karma-junit-reporter": "^0.2.2",
     "method-override": "^1.0.0",
     "morgan": "^1.0.0",
-    "karma": "~0.10",
+    "mysql": "^2.6.2",
+    "nodemailer": "^1.3.4",
     "protractor": "^1.1.1",
-    "bower": "^1.3.1",
+    "q": "^1.4.1",
     "shelljs": "^0.2.6",
-    "karma-junit-reporter": "^0.2.2"
+    "xoauth2": "^1.0.0"
   },
   "scripts": {
-    "postinstall": "bower install",
-
     "prestart": "npm install",
-    "start": "supervisor app.js",
-
+    "postinstall": "bower install --allow-root",
+    "start": "supervisor -n error app.js",
     "pretest": "npm install",
     "test": "karma start karma.conf.js",
     "test-single-run": "karma start karma.conf.js  --single-run",
-
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
-
     "preprotractor": "npm run update-webdriver",
     "protractor": "protractor e2e-tests/protractor.conf.js",
-
     "update-index-async": "node -e \"require('shelljs/global'); sed('-i', /\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/, '//@@NG_LOADER_START@@\\n' + sed(/sourceMappingURL=angular-loader.min.js.map/,'sourceMappingURL=bower_components/angular-loader/angular-loader.min.js.map','app/bower_components/angular-loader/angular-loader.min.js') + '\\n//@@NG_LOADER_END@@', 'app/index-async.html');\""
+  },
+  "configs": {
+    "client_javascript_paths": [
+      "public/components/common/helpers.js",
+      "public/libs/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js",
+      "public/libs/bower_components/jquery/dist/jquery.min.js",
+      "public/libs/bower_components/angular/angular.js",
+      "public/libs/bower_components/angular-route/angular-route.js",
+      "public/libs/bower_components/angular-resource/angular-resource.js",
+      "public/libs/bower_components/d3/d3.js",
+      "public/libs/bower_components/c3/c3.js",
+      "public/libs/bower_components/angular-chart/angular-chart.js",
+      "public/libs/bower_components/moment/moment.js",
+      "public/components/common/filters.js",
+      "public/components/notify/notify.js",
+      "public/components/static/static.js",
+      "public/components/auth/auth.js",
+      "public/components/header/header.js",
+      "public/components/side-nav/side-nav.js",
+      "public/components/formatted-table/formatted-table.js",
+      "public/app.js",
+      "public/libs/underscore.js"
+    ]
+  },
+  "devDependencies": {
+    "jasmine": "^2.3.1",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.12.37",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-jasmine": "^0.3.5",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "phantomjs": "^1.9.17"
   }
 }

@@ -4,49 +4,42 @@
 <!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>My AngularJS App</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/libs/bower_components/html5-boilerplate/css/normalize.css">
-  <link rel="stylesheet" href="/libs/bower_components/html5-boilerplate/css/main.css">
-  <link rel="stylesheet" href="/app.css">
-  <link rel="stylesheet" href="/libs/fontello/css/fontello.css">
-  <link rel="stylesheet" href="/slide-nav/slide-nav.css">
-  <script src="/libs/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <base href="/">
+    <title><%=title%></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/libs/bower_components/html5-boilerplate/css/normalize.css">
+    <link rel="stylesheet" href="/libs/bower_components/html5-boilerplate/css/main.css">
+    <link rel="stylesheet" href="/libs/bower_components/c3/c3.css" />
+    <link rel="stylesheet" href="/libs/bower_components/angular-chart/angular-chart.css">
+
+    <link rel="stylesheet" href="/libs/pure-release-0.6.0/base-min.css">
+    <link rel="stylesheet" href="/libs/pure-release-0.6.0/forms-min.css">
+    <link rel="stylesheet" href="/libs/pure-release-0.6.0/buttons-min.css">
+    <link rel="stylesheet" href="/app.css">
+    <link rel="stylesheet" href="/components/formatted-table/formatted-table.css" type="text/css" />
+    <link rel="stylesheet" href="/components/notify/notify.css" type="text/css" />
 </head>
-<body ng-controller="BodyCtrl" style="display:none;">
-  <div id="header-bar">
+<body style="display:none" ng-controller="AppCtrl" class="active-page-{{activePage}}">
+<notify></notify>
+<div id="header-bar">
     <div style="float-left" ng-controller="HeaderCtrl" ng-include="'/header/header.html'">
     </div>
-  </div>
-  <div id="slide-nav" ng-controller="SlideNavCtrl" ng-include="'/slide-nav/slide-nav.html'">
-  </div>
-  <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-  <![endif]-->
+</div>
+<div id="slide-nav" ng-controller="SlideNavCtrl" ng-include="'/slide-nav/slide-nav.html'">
+</div>
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
 
-  <div ng-view id="nav-view"></div>
+<div ng-view id="nav-view"></div>
 
-  
-  <div>Angular seed app: v<span app-version></span></div>
 
-  <!-- In production use:
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
-  -->
-  <script src="/libs/jquery-1.11.3.min.js"></script>
-  <script src="/libs/bower_components/angular/angular.js"></script>
-  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
-  <script>var moduleList = []</script>
-  <script src="/view1/view1.js"></script>
-  <script src="/view2/view2.js"></script>
-  <script src="/home/home.js"></script>
-  <script src="/slide-nav/slide-nav.js"></script>
-  <script src="/header/header.js"></script> 
-  <script src="/app.js"></script>
-  <script src="/version/version.js"></script>
-  <script src="/version/version-directive.js"></script>
-  <script src="/version/interpolate-filter.js"></script>
+<% for(var i = 0; i < client_javascript_paths.length; i++) {%>
+<script src="<%=client_javascript_paths[i] %>"></script>
+<% } %>
+
 </body>
 </html>

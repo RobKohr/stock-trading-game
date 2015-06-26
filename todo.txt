@@ -1,0 +1,8 @@
+* bring in mysql data
+* present mysql data in api
+* add the account pages
+* basic login/auth
+* send emails with auth keys
+* have the data come from mysql for the account pages
+* do some charting of data for performance page(need to understand the inputs here)
+* Add an upstart to keep the server alive and restart when server is rebooted

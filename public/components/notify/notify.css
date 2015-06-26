@@ -1,0 +1,39 @@
+#notify{
+    position:fixed;
+    top:0px;
+    left:0px;
+    z-index:1000;
+    width:100%;
+    color:white;
+    padding:0px;
+    margin:0px;
+}
+
+#notify ul{
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    opacity:1;
+    -webkit-transition: opacity 1s ease 0s;
+    -moz-transition: opacity 1s ease 0s;
+    -o-transition: opacity 1s ease 0s;
+    transition: opacity 1s ease 0s;
+}
+#notify ul.animate-hide{
+    opacity:0;
+    -webkit-transition: opacity 1s ease 0s;
+    -moz-transition: opacity 1s ease 0s;
+    -o-transition: opacity 1s ease 0s;
+    transition: opacity 1s ease 0s;
+}
+
+#notify li{
+    padding: 0.5em;
+}
+#notify .messages{
+    background-color: blue;
+}
+
+#notify .errors{
+    background-color: red;
+}

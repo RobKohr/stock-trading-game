@@ -1,0 +1,14 @@
+<link rel="stylesheet" type="text/css" href="/components/notify/notify.css">
+<div id="notify">
+    <ul class="errors" ng-show="errors.length" ng-animate="{show:'animate-show', hide:'animate-hide'}">
+        <li ng-repeat="el in errors">
+            {{el}}
+        </li>
+    </ul>
+
+    <ul class="messages" ng-show="messages.length">
+        <li ng-repeat="el in messages">
+            {{el}}
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,13 @@
+<table class="array-data-table data-table striped">
+    <tbody>
+    <tr ng-if="tableData.length" ng-init="row = tableData[0]" >
+        <th ng-repeat="key in row | keepSorted" ng-if="skippedFields.indexOf(key)==-1">{{key | camelCaseToSpaces}}</th>
+    </tr>
+    <tr ng-repeat="row in tableData">
+        <td ng-repeat="key in row | keepSorted" ng-init="val=row[key]" ng-if="skippedFields.indexOf(key)==-1">
+            <span ng-if="formatters[key]">{{formatters[key](val)}}</span>
+            <span ng-if="!formatters[key]">{{val}}</span>
+        </td>
+    </tr>
+    </tbody>
+</table>

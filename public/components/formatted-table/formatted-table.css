@@ -1,0 +1,20 @@
+
+table.striped{
+    border-bottom:2px solid #AFA291;
+    margin-bottom:6px;
+}
+
+table.striped > tbody > tr:nth-child(odd){
+    background:#DCD5C7;
+}
+
+
+table.data-table td{
+    padding:0.5em;
+    text-align:center;
+}
+
+th{
+    padding-left:10px;
+    padding-right:10px;
+}
