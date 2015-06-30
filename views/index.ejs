@@ -18,24 +18,29 @@
     <link rel="stylesheet" href="/libs/pure-release-0.6.0/base-min.css">
     <link rel="stylesheet" href="/libs/pure-release-0.6.0/forms-min.css">
     <link rel="stylesheet" href="/libs/pure-release-0.6.0/buttons-min.css">
+    <link rel="stylesheet" href="/libs/pure-release-0.6.0/menus-min.css">
     <link rel="stylesheet" href="/app.css">
     <link rel="stylesheet" href="/components/formatted-table/formatted-table.css" type="text/css" />
     <link rel="stylesheet" href="/components/notify/notify.css" type="text/css" />
+    <link rel="stylesheet" href="/libs/fontello/css/fontello.css" type="text/css" />
 </head>
-<body style="display:none" ng-controller="AppCtrl" class="active-page-{{activePage}}">
+<body style="display:none" ng-controller="AppCtrl" class="active-page-{{activePage}}" ng-class="{'show-sidebar': $rootScope.showSidebar}">
 <notify></notify>
-<div id="header-bar">
-    <div style="float-left" ng-controller="HeaderCtrl" ng-include="'/header/header.html'">
+<div id="sidebar" class="pure-menu custom-restricted-width" ng-init="menu = [{heading:'Trading', items:['porfolio', 'trade']}, {heading:'Community', items:['ranking']}, {heading:'Account', items:['profile', 'logout']}]">
+    <div ng-repeat="grouping in menu">
+        <span class="pure-menu-heading">{{grouping.heading}}</span>
+        <ul class="pure-menu-list">
+            <li ng-repeat="item in grouping.items" class="pure-menu-item" ng-click="$rootScope.showSidebar=false"><a href="/{{item}}" class="pure-menu-link"><div style="float:right" class="icon-angle-right"></div>{{item | underscoreToSpace | capitalize}}</a></li>
+        </ul>
     </div>
 </div>
-<div id="slide-nav" ng-controller="SlideNavCtrl" ng-include="'/slide-nav/slide-nav.html'">
+<div id="header">
+    <div class="menu-button icon-menu" ng-click="$rootScope.showSidebar = !$rootScope.showSidebar"></div>
+    <input type="text" ng-model="search" id="search-input" class="pure-input-1-2" placeholder="&#xE800 Quote Search"  style="font-family:fontello" />
 </div>
-<!--[if lt IE 7]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-<![endif]-->
-
-<div ng-view id="nav-view"></div>
-
+<div id="content-frame">
+    <div ng-view class="content-area"></div>
+</div>
 
 <% for(var i = 0; i < client_javascript_paths.length; i++) {%>
 <script src="<%=client_javascript_paths[i] %>"></script>

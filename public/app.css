@@ -1,72 +1,110 @@
-/* app css stylesheet */
-body{
-  padding:0px;
+
+a {
+  color: #0000FF;
+  text-decoration: none;
+}
+a:hover{
+  text-decoration:underline;
+}
+
+li a:hover{
+  text-decoration: none;
+}
+
+
+form{
+  margin:1em;
+}
+
+form .pure-button-primary, form .pure-button-selected, form a.pure-button-primary, form a.pure-button-selected{
+    background-color: #AFA291;
+}
+
+.layout-table{
+  display:table;
+  width:100%;
+  position:relative;
+  top:0px;
+  left:0px;
   margin:0px;
+  padding:0px;
 }
 
-a{
-  text-decoration:none;
+.layout-row{
+  display:table-row;
 }
 
-a{
-  color:blue;
+.layout-cell{
+  display:table-cell;
+  min-height:40px;
+  margin:0px;
+  padding:0px;
+  border:0px;
 }
 
-.menu-button, .header-bar{
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.chart{
+  background-color:white;
 }
 
-.menu-button{
-  position: absolute;
-  top: 5px;
-  left: 5px;
-}
 
-.menu {
-  list-style: none;
-  margin-bottom: 2em;
-  padding:1em;
-}
-
-.menu > li {
-  padding:1em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
-}
-
-#header-bar{
-  background:yellow;
-  padding-top:4px;
-  padding-bottom:4px;
+#header{
+  background:black;
+  width:100%;
+  text-align: center;
   position:fixed;
   top:0px;
   left:0px;
-  width:100%;
-  margin:0px;
-  height:25px;
-  z-index: 300;
+  height:60px;
 }
-#nav-view{
-  margin-top:33px;
+#header .menu-button{
+  color:white;
+  position:absolute;
+  left:0px;
+  top:0px;
+  font-size:30px;
+  margin-top:6px;
+  cursor: pointer;
 }
 
-#slide-nav{
-  z-index: 400;
+#search-input{
+  width:80%;
+  margin:1em;
+  border-radius: 10px;
+  padding:3px;
+}
+
+#content-frame{
+  margin-top:60px;
+}
+
+#sidebar{
+  display:none;
   position:fixed;
   top:0px;
+  left:0px;
   width:200px;
-  background:green;
 }
 
-.header-value{
-  float:right;
-  padding-right:1em;
+.show-sidebar #sidebar{
+  display:block;
+}
+
+.show-sidebar #header{
+  left:200px;
+}
+.show-sidebar #content-frame{
+  margin-left:200px;
+}
+.show-sidebar .menu-button{
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.custom-restricted-width {
+  /* To limit the menu width to the content of the menu: */
+  display: inline-block;
+  /* Or set the width explicitly: */
+  /* width: 10em; */
 }

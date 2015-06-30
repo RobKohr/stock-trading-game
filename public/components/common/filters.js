@@ -59,24 +59,5 @@ angular.module(moduleName, []).
             }).trim();
       };
       //modified from: https://stackoverflow.com/questions/4149276/javascript-camelcase-to-regular-form
-    }).
-    filter('commaNumber', function () {
-
-        return function (input) {
-            return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        };
-
-    }).
-    filter('floor', function () {
-
-        return function (input, num) {
-            if(!num){
-                num = 0;
-            }
-            var out = input * Math.pow(10, num);
-            var out = Math.floor(out);
-            out = out / Math.pow(10, num)
-            return Math.floor(input);
-        };
-
     });
+
