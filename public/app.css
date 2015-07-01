@@ -1,110 +1,114 @@
 
 a {
-  color: #0000FF;
-  text-decoration: none;
+    color: #0000FF;
+    text-decoration: none;
 }
 a:hover{
-  text-decoration:underline;
+    text-decoration:underline;
 }
 
 li a:hover{
-  text-decoration: none;
+    text-decoration: none;
 }
 
 
 form{
-  margin:1em;
+    margin:1em;
 }
 
 form .pure-button-primary, form .pure-button-selected, form a.pure-button-primary, form a.pure-button-selected{
     background-color: #AFA291;
 }
+.content-area{
+    padding-left: 1em;
+    padding-right: 1em;
+}
 
 .layout-table{
-  display:table;
-  width:100%;
-  position:relative;
-  top:0px;
-  left:0px;
-  margin:0px;
-  padding:0px;
+    display:table;
+    width:100%;
+    position:relative;
+    top:0px;
+    left:0px;
+    margin:0px;
+    padding:0px;
 }
 
 .layout-row{
-  display:table-row;
+    display:table-row;
 }
 
 .layout-cell{
-  display:table-cell;
-  min-height:40px;
-  margin:0px;
-  padding:0px;
-  border:0px;
+    display:table-cell;
+    min-height:40px;
+    margin:0px;
+    padding:0px;
+    border:0px;
 }
 
 .chart{
-  background-color:white;
+    background-color:white;
 }
 
 
 #header{
-  background:black;
-  width:100%;
-  text-align: center;
-  position:fixed;
-  top:0px;
-  left:0px;
-  height:60px;
+    background:black;
+    width:100%;
+    text-align: center;
+    position:fixed;
+    top:0px;
+    left:0px;
+    height:60px;
 }
 #header .menu-button{
-  color:white;
-  position:absolute;
-  left:0px;
-  top:0px;
-  font-size:30px;
-  margin-top:6px;
-  cursor: pointer;
+    color:white;
+    position:absolute;
+    left:0px;
+    top:0px;
+    font-size:30px;
+    margin-top:6px;
+    cursor: pointer;
 }
 
 #search-input{
-  width:80%;
-  margin:1em;
-  border-radius: 10px;
-  padding:3px;
+    width:80%;
+    margin:1em;
+    border-radius: 10px;
+    padding:3px;
 }
 
 #content-frame{
-  margin-top:60px;
+    margin-top:60px;
 }
 
 #sidebar{
-  display:none;
-  position:fixed;
-  top:0px;
-  left:0px;
-  width:200px;
+    display:none;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:200px;
 }
 
 .show-sidebar #sidebar{
-  display:block;
+    display:block;
 }
 
 .show-sidebar #header{
-  left:200px;
+    left:200px;
 }
 .show-sidebar #content-frame{
-  margin-left:200px;
+    margin-left:200px;
 }
 .show-sidebar .menu-button{
-  -moz-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  -webkit-transform: rotate(90deg);
-  transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
 .custom-restricted-width {
-  /* To limit the menu width to the content of the menu: */
-  display: inline-block;
-  /* Or set the width explicitly: */
-  /* width: 10em; */
+    /* To limit the menu width to the content of the menu: */
+    display: inline-block;
+    /* Or set the width explicitly: */
+    /* width: 10em; */
 }

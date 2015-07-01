@@ -53,6 +53,7 @@
       "public/components/static/static.js",
       "public/components/account/account.js",
       "public/components/auth/auth.js",
+      "public/components/portfolio/portfolio.js",
       "public/components/formatted-table/formatted-table.js",
       "public/app.js",
       "public/libs/underscore.js"
