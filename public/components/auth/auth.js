@@ -16,44 +16,14 @@ angular.module(moduleName, []).
         helpers.addPagesToRouteProvider($routeProvider, pages, pagesWithControllers, 'auth/');
     }]).
 
-    service('AuthService', ['$resource', '$rootScope', '$location', 'NotifyService', function($resource, $rootScope, $location, NotifyService) {
-
-
-        var AuthService = $resource('/api/auth', {}, {
-            login_status: {
-                method: 'GET',
-                url: '/api/auth/login_status',
-                isArray: false
-            },
-            login: {
-                method: 'POST',
-                url: '/api/auth/login',
-                isArray: false,
-                headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                transformRequest: $.param
-            },
-            logout: {
-                method: 'POST',
-                url: '/api/auth/logout',
-                isArray: false,
-                headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                transformRequest: $.param
-            },
-            register: {
-                method: 'POST',
-                url: '/api/auth/register',
-                isArray: false,
-                headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                transformRequest: $.param
-            },
-            getUserFromToken: {
-                method: 'POST',
-                url: '/api/auth/user_from_token',
-                isArray: false,
-                headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                transformRequest: $.param,
-            }
-        });
+    service('AuthService', ['ResourceHelperService', '$rootScope', '$location', 'NotifyService', function(ResourceHelperService, $rootScope, $location, NotifyService) {
+        var AuthService = ResourceHelperService.createResources({
+            login_status: {url: '/api/auth/login_status', method: 'GET'},
+            login: {url: '/api/auth/login'},
+            logout: {url: '/api/auth/logout'},
+            register: {url: '/api/auth/register'},
+            getUserFromToken: {url: '/api/auth/user_from_token'},
+        })
         AuthService.loggedInUserId = null;
 
         AuthService.requireLogin = function(){
@@ -85,7 +55,7 @@ angular.module(moduleName, []).
     controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'AuthService', 'NotifyService', function ($scope, $rootScope, $location, AuthService, NotifyService) {
 
         $scope.submit = function() {
-            AuthService.login({email:$scope.email, password:$scope.password}, function(result){
+            AuthService.login({username:$scope.username, password:$scope.password}, function(result){
                 NotifyService.handleResponseMessages(result);
                 console.log(result);
                 if(result.success){
@@ -106,8 +76,8 @@ angular.module(moduleName, []).
             if(!$scope.token){
                 NotifyService.showErrors(['Token not set']);
             }
-            if(!$scope.email){
-                NotifyService.showErrors(['Email not set']);
+            if(!$scope.username){
+                NotifyService.showErrors(['Username not set']);
             }
             if($scope.password != $scope.retype_password){
                 NotifyService.showErrors(['Password and Retype Password do not match.']);

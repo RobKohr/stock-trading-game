@@ -1,5 +1,5 @@
 'use strict';
-var moduleName = 'portfolio';
+var moduleName = 'trade';
 angularModules.push(moduleName);
 angular.module(moduleName, []).
     config(['$routeProvider', function($routeProvider) {
@@ -14,10 +14,14 @@ angular.module(moduleName, []).
 
     }]).
 
-    service('PortfolioService', ['ResourceHelperService', function(ResourceHelperService) {
-        return ResourceHelperService.createResources({
-            stock_positions: {url: '/api/stock_positions', method: 'GET'}
-        })
+    service('PortfolioService', ['$resource', function($resource) {
+        return $resource('/api/', {}, {
+            stock_positions: {
+                method: 'GET',
+                url: '/api/stock_positions',
+                isArray: false
+            }
+        });
     }]).
     controller('PortfolioCtrl', ['$scope', 'PortfolioService', 'NotifyService', function ($scope, PortfolioService, NotifyService) {
         //if(!AuthService.requireLogin()) return;
@@ -31,7 +35,7 @@ angular.module(moduleName, []).
         };
         console.log('hello');
         PortfolioService.stock_positions(function(result){
-            if(!result) return;
+            console.log('a');
             if(NotifyService.handleResponseMessages(result)){
                 console.log('b', result);
                 $scope.tableData = result.data;

@@ -40,6 +40,8 @@ angular.module(moduleName, []).
         }
 
         var createTimedMessages = function(arr, collection){
+            if(!arr) return;
+            if(typeof(arr)=='string') arr = [arr];
             var timeLimit = 2000;
             _.each(arr, function(el){
                 collection.push(el);

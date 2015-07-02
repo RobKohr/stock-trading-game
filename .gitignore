@@ -7,3 +7,4 @@ public/libs/bower_components
 npm-debug.log
 *.log.*
 .idea
+local.conf.json

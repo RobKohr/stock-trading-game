@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "stock-trading-game",
   "display_name": "Stock Trading Game",
   "version": "0.0.1",
   "private": true,
@@ -7,6 +7,7 @@
     "bcrypt": "^0.8.3",
     "body-parser": "^1.0.2",
     "bower": "^1.4.1",
+    "compression": "^1.5.0",
     "ejs": "^2.3.1",
     "errorhandler": "^1.4.0",
     "express": "~4.1.1",
@@ -20,6 +21,7 @@
     "karma-jasmine": "^0.3.5",
     "karma-junit-reporter": "^0.2.2",
     "method-override": "^1.0.0",
+    "mongodb": "^2.0.35",
     "morgan": "^1.0.0",
     "protractor": "^1.1.1"
   },
@@ -48,6 +50,7 @@
       "public/libs/bower_components/c3/c3.js",
       "public/libs/bower_components/angular-chart/angular-chart.js",
       "public/libs/bower_components/moment/moment.js",
+      "public/components/resource-helper/resource-helper.js",
       "public/components/common/filters.js",
       "public/components/notify/notify.js",
       "public/components/static/static.js",
