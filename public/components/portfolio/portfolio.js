@@ -10,15 +10,16 @@ angular.module(moduleName, []).
             'portfolio'
         ]
 
-        helpers.addPagesToRouteProvider($routeProvider, pages, pagesWithControllers, '/portfolio/');
+        helpers.addPagesToRouteProvider($routeProvider, pages, pagesWithControllers, 'portfolio/');
 
     }]).
 
-    service('PortfolioService', ['ResourceHelperService', function(ResourceHelperService) {
+    factory('PortfolioService', ['ResourceHelperService', function(ResourceHelperService) {
         return ResourceHelperService.createResources({
             stock_positions: {url: '/api/stock_positions', method: 'GET'}
         })
     }]).
+
     controller('PortfolioCtrl', ['$scope', 'PortfolioService', 'NotifyService', function ($scope, PortfolioService, NotifyService) {
         //if(!AuthService.requireLogin()) return;
         $scope.tableData = [];

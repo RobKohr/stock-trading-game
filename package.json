@@ -57,6 +57,7 @@
       "public/components/account/account.js",
       "public/components/auth/auth.js",
       "public/components/portfolio/portfolio.js",
+      "public/components/trade/trade.js",
       "public/components/formatted-table/formatted-table.js",
       "public/app.js",
       "public/libs/underscore.js"

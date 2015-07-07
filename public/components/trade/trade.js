@@ -4,42 +4,24 @@ angularModules.push(moduleName);
 angular.module(moduleName, []).
     config(['$routeProvider', function($routeProvider) {
         var pages = [
-            'portfolio'
+            'trade'
         ];
         var pagesWithControllers = [
-            'portfolio'
+            'trade'
         ]
 
-        helpers.addPagesToRouteProvider($routeProvider, pages, pagesWithControllers, '/portfolio/');
+        helpers.addPagesToRouteProvider($routeProvider, pages, pagesWithControllers, 'trade/');
 
     }]).
 
-    service('PortfolioService', ['$resource', function($resource) {
-        return $resource('/api/', {}, {
-            stock_positions: {
-                method: 'GET',
-                url: '/api/stock_positions',
-                isArray: false
-            }
-        });
+    factory('TradeService', ['ResourceHelperService', function(ResourceHelperService) {
+        return ResourceHelperService.createResources({
+            buy: {url: '/api/trade/buy', method: 'POST'},
+            sell: {url: '/api/trade/sell', method: 'POST'}
+        })
     }]).
-    controller('PortfolioCtrl', ['$scope', 'PortfolioService', 'NotifyService', function ($scope, PortfolioService, NotifyService) {
-        //if(!AuthService.requireLogin()) return;
-        $scope.tableData = [];
-        $scope.skippedFields = ['$$hashKey'];
 
-        $scope.formatters = {
-            'date':function(str){
-                return moment(str).format('MM/DD/YYYY')
-            }
-        };
-        console.log('hello');
-        PortfolioService.stock_positions(function(result){
-            console.log('a');
-            if(NotifyService.handleResponseMessages(result)){
-                console.log('b', result);
-                $scope.tableData = result.data;
-            }
-        });
-
+    controller('TradeCtrl', ['$scope', 'TradeService', function ($scope, PortfolioService) {
+        $scope.transaction_type = 'buy';
+        $scope.max_amount = 100;
     }]);

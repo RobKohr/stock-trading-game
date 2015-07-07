@@ -16,7 +16,7 @@ angular.module(moduleName, []).
         helpers.addPagesToRouteProvider($routeProvider, pages, pagesWithControllers, 'auth/');
     }]).
 
-    service('AuthService', ['ResourceHelperService', '$rootScope', '$location', 'NotifyService', function(ResourceHelperService, $rootScope, $location, NotifyService) {
+    factory('AuthService', ['ResourceHelperService', '$rootScope', '$location', 'NotifyService', function(ResourceHelperService, $rootScope, $location, NotifyService) {
         var AuthService = ResourceHelperService.createResources({
             login_status: {url: '/api/auth/login_status', method: 'GET'},
             login: {url: '/api/auth/login'},

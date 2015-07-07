@@ -4,7 +4,7 @@ var moduleName = 'notify';
 
 angularModules.push(moduleName);
 angular.module(moduleName, []).
-    service('NotifyService', ['$resource', '$rootScope', '$location', '$timeout', function($resource, $rootScope, $location, $timeout) {
+    factory('NotifyService', ['$resource', '$rootScope', '$location', '$timeout', function($resource, $rootScope, $location, $timeout) {
         var NotifyService = {};
 
         NotifyService.errors = [];
@@ -44,6 +44,9 @@ angular.module(moduleName, []).
             if(typeof(arr)=='string') arr = [arr];
             var timeLimit = 2000;
             _.each(arr, function(el){
+                if(collection.indexOf(el)!==-1){
+                    return;//don't add it twice
+                }
                 collection.push(el);
                 $timeout(function removeElement(){
                     collection.removeMatch(el);

@@ -7,7 +7,7 @@
 var moduleName = 'resource-helper';
 angularModules.push(moduleName);
 angular.module(moduleName, []).
-    service('ResourceHelperService', ['$resource', '$rootScope', '$location', 'NotifyService', function($resource, $rootScope, $location, NotifyService) {
+    factory('ResourceHelperService', ['$resource', '$rootScope', '$location', 'NotifyService', function($resource, $rootScope, $location, NotifyService) {
 
         var overrideObject = function(obj, overrides){
             if( (!overrides) || (typeof(overrides)!=object) ){

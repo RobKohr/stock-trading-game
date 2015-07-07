@@ -10,15 +10,16 @@ a:hover{
 li a:hover{
     text-decoration: none;
 }
-
+.pure-form .pure-group input[type="radio"]{
+    display:inline;
+    margin-right:2em;
+    background:green;
+}
 
 form{
     margin:1em;
 }
 
-form .pure-button-primary, form .pure-button-selected, form a.pure-button-primary, form a.pure-button-selected{
-    background-color: #AFA291;
-}
 .content-area{
     padding-left: 1em;
     padding-right: 1em;

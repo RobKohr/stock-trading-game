@@ -66,19 +66,24 @@ exports['stock_positions'] = function(req, res){
     ];
     return res.json({success:true, data:data});
 };
+help['funds'] = {required_fields:[], optional_fields:[], login_required:true, description:'get users current funds'};
+exports['funds'] = function(req, res){
+    getLoggedInUser(req, res, function(user){
+
+    });
+};
 
 help['trade/buy'] = {required_fields:['stock', 'total_value'], optional_fields:[], login_required:true, description:'Purchase stocks up to a specific value'};
 exports['trade/buy'] = function(req, res){
-
+    return res.json({success:true});
 };
 
 help['trade/sell'] = {required_fields:['stock', 'quantity'], optional_fields:[], login_required:true, description:'Sell a certain number of stocks'};
 exports['trade/sell'] = function(res, res){
-
+    return res.json({success:true});
 };
 
 // AUTH
-//returns the required field if set. Otherwise sends error and returns nothing.
 
 help['auth/register'] = {required_fields:['username', 'password'], optional_fields:[], login_required:false, description:'Create a new user'};
 exports['auth/register'] = function(req, res){
@@ -138,14 +143,18 @@ exports['auth/login_status'] = function(req, res){
     }
 };
 help['auth/logged_in_user'] = {required_fields:[], optional_fields:[], login_required:true, description:'returns {success:true, user:userObject} if user is logged in'};
-exports['auth/logged_in_user'] = function(req, res, test){
-    res.json(test);
-    if(!req.session.username) return res.json({success:false, error:'User not logged in'});
+exports['auth/logged_in_user'] = function(req, res){
+    getLoggedInUser(req, res, function(user){
+        return res.json({success:true, user:user});
+    })
+};
+
+function getLoggedInUser(req, res, callback){
     db.collection('users').findOne({_id:req.session.username}, function(err, user){
         if(err || !user){
             return res.json({success:false, error:'No user found: '+ username});
         }
         delete user.password_hash;
-        return res.json({success:true, user:user});
+        return callback(user);
     });
-};
+}

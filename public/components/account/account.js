@@ -20,7 +20,7 @@ angular.module(moduleName, []).
 
     }]).
 
-    service('AccountService', ['$resource', function($resource) {
+    factory('AccountService', ['$resource', function($resource) {
         return $resource('/api/', {}, {
             account_info: {
                 method: 'GET',

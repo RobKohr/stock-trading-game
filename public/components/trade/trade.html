@@ -1,0 +1,37 @@
+<style type="text/css">
+    .pure-form .pure-group label.pure-radio{
+        border:1px solid gray;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        width:4em;
+        padding:.7em;
+        float:left;
+        margin:1em;
+    }
+    label.pure-radio.selected{
+        background:lightskyblue;
+    }
+    .pure-form .pure-group #input-amount, .pure-form .pure-group .range{
+        margin-bottom:1em;
+    }
+    .pure-form .pure-group .range{
+    }
+</style>
+<form class="pure-form" ng-submit="submit()">
+    <fieldset class="pure-group">
+        <label for="buy-radio" class="pure-radio" ng-class="{selected: transaction_type=='buy'}">
+            <input id="buy-radio" type="radio" ng-model="transaction_type" value="buy" checked>
+            Buy
+        </label>
+        <label for="sell-radio" class="pure-radio" ng-class="{selected: transaction_type=='sell'}">
+            <input id="sell-radio" type="radio" ng-model="transaction_type" value="sell">
+            Sell
+        </label>
+        <div style="clear:both"></div>
+        <input ng-model="stock" type="text" class="pure-input-1-2" placeholder="Stock Ticker">
+        <input ng-model="amount" id="input-amount" type="date" class="pure-input-1-2" placeholder="Amount">
+        <input class="range pure-input-1-2" id="slider1" type="range" value="0" min="1" max="{{max_amount}}" step="1" />
+    </fieldset>
+    <button type="submit" class="pure-button pure-input-1-2 pure-button-primary">{{transaction_type | capitalize}}</button>
+</form>
