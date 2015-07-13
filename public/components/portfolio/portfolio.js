@@ -1,42 +1,45 @@
 'use strict';
 var moduleName = 'portfolio';
 angularModules.push(moduleName);
-angular.module(moduleName, []).
-    config(['$routeProvider', function($routeProvider) {
+(function () {
+    angular.module(moduleName, []).
+        config(['$routeProvider', config]).
+        factory('PortfolioService', ['ResourceHelperService', PortfolioService]).
+        controller('PortfolioCtrl', ['$scope', 'PortfolioService', 'NotifyService', PortfolioCtrl]);
+
+
+    function config($routeProvider) {
         var pages = [
             'portfolio'
         ];
         var pagesWithControllers = [
             'portfolio'
         ]
-
         helpers.addPagesToRouteProvider($routeProvider, pages, pagesWithControllers, 'portfolio/');
+    }
 
-    }]).
-
-    factory('PortfolioService', ['ResourceHelperService', function(ResourceHelperService) {
+    function PortfolioService(ResourceHelperService) {
         return ResourceHelperService.createResources({
             stock_positions: {url: '/api/stock_positions', method: 'GET'}
         })
-    }]).
+    }
 
-    controller('PortfolioCtrl', ['$scope', 'PortfolioService', 'NotifyService', function ($scope, PortfolioService, NotifyService) {
+    function PortfolioCtrl($scope, PortfolioService, NotifyService) {
         //if(!AuthService.requireLogin()) return;
         $scope.tableData = [];
         $scope.skippedFields = ['$$hashKey'];
 
         $scope.formatters = {
-            'date':function(str){
+            'date': function (str) {
                 return moment(str).format('MM/DD/YYYY')
             }
         };
-        console.log('hello');
-        PortfolioService.stock_positions(function(result){
-            if(!result) return;
-            if(NotifyService.handleResponseMessages(result)){
+        PortfolioService.stock_positions(function (result) {
+            if (!result) return;
+            if (NotifyService.handleResponseMessages(result)) {
                 console.log('b', result);
                 $scope.tableData = result.data;
             }
         });
-
-    }]);
+    }
+}());

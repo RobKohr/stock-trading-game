@@ -1,8 +1,0 @@
-<table class="keypair-data-table data-table striped">
-	<tbody>
-		<tr ng-repeat="key in tableData | keepSorted" ng-init="val=tableData[key]" ng-if="skippedFields.indexOf(key)==-1">
-			<td>{{key | capitalize}}:</td>
-			<td>{{val}}</td>
-		</tr>
-	</tbody>
-</table>

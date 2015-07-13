@@ -45,7 +45,8 @@ angular.module(moduleName, []).
                         response: function (response) {
                             var data = response.data;
                             if(data.redirect){
-                                $location.path(data.redirect);
+                                $location.path(data.redirect + '?redirect_from='+window.encodeURIComponent($location.path()));
+                                console.log('e'+ data.redirect + '?redirect_from='+window.encodeURIComponent($location.path()));
                             }
                             NotifyService.handleResponseMessages(data);
                             return response.data;

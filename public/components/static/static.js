@@ -1,10 +1,14 @@
 var moduleName = 'static';
 angularModules.push(moduleName);
-angular.module(moduleName, []).
-    config(['$routeProvider', function($routeProvider) {
-        var pages = [
-            'home'
-        ];
+
+(function () {
+    angular.module(moduleName, []).
+        config(['$routeProvider', config]);
+
+
+    function config($routeProvider) {
+        var pages = [];
         var pagesWithControllers = []
         helpers.addPagesToRouteProvider($routeProvider, pages, pagesWithControllers, 'static/');
-    }]);
+    }
+}());

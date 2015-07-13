@@ -29,7 +29,8 @@ angular.module(moduleName, []).
         AuthService.requireLogin = function(){
             if(!AuthService.loggedInUserId){
                 NotifyService.showErrors(['Login required']);
-                $location.path('/login');
+                $location.path('/login?redirect_from='+window.encodeURIComponent($location.path()));
+                console.log('b');
             }
             return AuthService.loggedInUserId;
         };
@@ -43,6 +44,7 @@ angular.module(moduleName, []).
 
     controller('LogoutCtrl', ['$scope', '$rootScope', '$location', 'AuthService', 'NotifyService', function ($scope, $rootScope, $location, AuthService, NotifyService) {
         $location.path('/home');
+        console.log('c');
         AuthService.logout({}, function(result){
             NotifyService.handleResponseMessages(result);
             if(result.success){
@@ -101,7 +103,8 @@ angular.module(moduleName, []).
             AuthService.register(registration, function(result){
                 NotifyService.handleResponseMessages(result)
                 if(result.success){
-                    $location.path('/login');
+                    $location.path('/login?redirect_from='+window.encodeURIComponent($location.path()));
+                    console.log('d');
                 }
             });
 

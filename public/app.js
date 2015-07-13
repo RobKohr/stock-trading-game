@@ -20,10 +20,7 @@ angular.module('myApp', [
             var basePages = ['home', 'strategy', 'contact'];
             $scope.pages = basePages;
             if((typeof(loggedInUserId)!='undefined') && (Number(loggedInUserId) > 0)){
-                $scope.pages = basePages.concat(['account', 'logout']);
-                if($location.path() == '/login') {
-                    $location.path('/account');
-                }
+                $scope.pages = basePages.concat(['logout']);
             }else{
                 $scope.pages = basePages.concat(['login']);
             }

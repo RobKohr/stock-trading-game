@@ -54,7 +54,7 @@
       "public/components/common/filters.js",
       "public/components/notify/notify.js",
       "public/components/static/static.js",
-      "public/components/account/account.js",
+      "public/components/home/home.js",
       "public/components/auth/auth.js",
       "public/components/portfolio/portfolio.js",
       "public/components/trade/trade.js",

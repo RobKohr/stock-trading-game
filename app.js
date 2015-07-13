@@ -22,7 +22,7 @@ var app = module.exports = express();
 // all environments
 app.use(session({secret: local_config.secret}));
 app.use(compress());
-app.set('port', process.env.PORT || 80);
+app.set('port', local_config.port || process.env.PORT || 80);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.set('view engine', 'ejs');
@@ -52,9 +52,12 @@ if (env === 'production') {
  */
 
 // serve index and view partials
-app.get('/*.html', function(req, res, next){
+app.get('/*.html', f404);
+app.get('/*.js', f404);
+
+function f404(req, res, next){
     res.send(404);
-});
+}
 
 app.get('/', routes.index);
 app.get('/partials/:name', routes.partials);
