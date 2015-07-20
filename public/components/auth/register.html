@@ -1,6 +1,11 @@
+<div>
+    <button type="button" class="pure-button pure-input-1-2 pure-button-secondary" ng-click="location.path('/login')">Login</button>
+    <button type="button" class="pure-button pure-input-1-2 pure-button-primary">Register</button>
+</div>
 <form class="pure-form" ng-submit="submit()">
     <fieldset class="pure-group">
-        <input ng-model="email" type="text" class="pure-input-1-2" disabled>
+        <legend>Register</legend>
+        <input ng-model="email" type="text" class="pure-input-1-2" placeholder="Email">
         <input ng-model="password" type="password" class="pure-input-1-2" placeholder="Password">
         <input ng-model="retype_password" type="password" class="pure-input-1-2" placeholder="Retype Password">
     </fieldset>

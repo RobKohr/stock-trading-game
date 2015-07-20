@@ -29,8 +29,11 @@ angular.module(moduleName, []).
         AuthService.requireLogin = function(){
             if(!AuthService.loggedInUserId){
                 NotifyService.showErrors(['Login required']);
-                $location.path('/login?redirect_from='+window.encodeURIComponent($location.path()));
-                console.log('b');
+                if(!AuthService.redirectToAfterLogin) {
+                    AuthService.redirectToAfterLogin = $location.path();
+                }
+                console.log('/login');
+                $location.path('/login');
             }
             return AuthService.loggedInUserId;
         };
@@ -55,7 +58,7 @@ angular.module(moduleName, []).
     }]).
 
     controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'AuthService', 'NotifyService', function ($scope, $rootScope, $location, AuthService, NotifyService) {
-
+        $scope.location = $location;
         $scope.submit = function() {
             AuthService.login({username:$scope.username, password:$scope.password}, function(result){
                 NotifyService.handleResponseMessages(result);
@@ -63,6 +66,12 @@ angular.module(moduleName, []).
                 if(result.success){
                     AuthService.loggedInUserId = result.loggedInUserId;
                     $rootScope.$broadcast('auth.updateUserLoggedIn', result.loggedInUserId);
+                    if(AuthService.redirectToAfterLogin){
+                        $location.path(AuthService.redirectToAfterLogin);
+                        AuthService.redirectToAfterLogin = null;
+                    }else{
+                        $location.path('/home');
+                    }
 
                 }
             });
@@ -73,11 +82,7 @@ angular.module(moduleName, []).
         var token = $routeParams.token;
         $scope.submit = null;
         //this will be assigned to scope.submit after auth service gets token and email back
-        var submit = function() {
-
-            if(!$scope.token){
-                NotifyService.showErrors(['Token not set']);
-            }
+        $scope.submit = function() {
             if(!$scope.username){
                 NotifyService.showErrors(['Username not set']);
             }
@@ -95,25 +100,21 @@ angular.module(moduleName, []).
 
             //password is valid, update user
             var registration = {
-                token: $scope.token,
                 password: $scope.password,
-                email: $scope.email
+                username: $scope.username
             };
 
             AuthService.register(registration, function(result){
                 NotifyService.handleResponseMessages(result)
                 if(result.success){
-                    $location.path('/login?redirect_from='+window.encodeURIComponent($location.path()));
-                    console.log('d');
+                    if(!AuthService.redirectToAfterLogin) {
+                        AuthService.redirectToAfterLogin = $location.path();
+                    }
+                    $location.path('/login');
                 }
             });
 
         }
 
-        AuthService.getUserFromToken({token:token}, function(user){
-            $scope.token = token;
-            $scope.email = user.email;
-            $scope.submit = submit;
-        });
 
     }]);

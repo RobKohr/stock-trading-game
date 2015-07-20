@@ -19,7 +19,7 @@ angularModules.push(moduleName);
     }
 
     function HomeService(ResourceHelperService) {
-
+        return {};
     }
 
     function HomeCtrl($scope, HomeService, NotifyService) {

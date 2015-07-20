@@ -5,7 +5,7 @@ angularModules.push(moduleName);
     angular.module(moduleName, []).
         config(['$routeProvider', config]).
         factory('PortfolioService', ['ResourceHelperService', PortfolioService]).
-        controller('PortfolioCtrl', ['$scope', 'PortfolioService', 'NotifyService', PortfolioCtrl]);
+        controller('PortfolioCtrl', ['$scope', 'AuthService', 'PortfolioService', 'NotifyService', PortfolioCtrl]);
 
 
     function config($routeProvider) {
@@ -24,8 +24,8 @@ angularModules.push(moduleName);
         })
     }
 
-    function PortfolioCtrl($scope, PortfolioService, NotifyService) {
-        //if(!AuthService.requireLogin()) return;
+    function PortfolioCtrl($scope, AuthService,  PortfolioService, NotifyService) {
+        if(!AuthService.requireLogin()) return;
         $scope.tableData = [];
         $scope.skippedFields = ['$$hashKey'];
 
