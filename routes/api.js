@@ -85,7 +85,7 @@ exports['trade/sell'] = function(res, res){
 
 // AUTH
 
-help['auth/register'] = {required_fields:['username', 'password'], optional_fields:[], login_required:false, description:'Create a new user'};
+help['auth/register'] = {required_fields:['username', 'password'], optional_fields:['email'], login_required:false, description:'Create a new user'};
 exports['auth/register'] = function(req, res){
     var username = req.request.username,
         password = req.request.password;
@@ -113,9 +113,9 @@ exports['auth/register'] = function(req, res){
 
 help['auth/login'] = {required_fields:['username', 'password'], optional_fields:[], login_required:false, description:'Login as a user. Returns {success:true, username:username} for logged in user '};
 exports['auth/login'] = function(req, res){
-    var username = req.request.username,
+    var email = req.request.email,
         password = req.request.password;
-    username = username.toLowerCase();
+    email = email.toLowerCase();
 
     db.collection('users').findOne({_id:username}, function(err, user){
         if(err || !user){
