@@ -4,7 +4,7 @@
   var moduleName = 'auth';
   angularModules.push(moduleName);
 
-  angular.module(moduleName, []).
+  angular.module(moduleName, ['resource-helper']).
       config(['$routeProvider', config]).
       factory('AuthService', ['ResourceHelperService', '$rootScope', '$location', 'NotifyService', AuthService]).
       controller('LogoutCtrl', ['$rootScope', '$location', 'AuthService', 'NotifyService', LogoutCtrl]).
@@ -30,35 +30,43 @@
       register: {url: '/api/auth/register'},
       getUserFromToken: {url: '/api/auth/user_from_token'}
     });
-    AuthService.loggedInUserId = null;
+    AuthService.loggedInUser = null;
 
-    AuthService.requireLogin = function () {
-      if (!AuthService.loggedInUserId) {
-        NotifyService.showErrors(['Login required']);
-        if (!AuthService.redirectToAfterLogin) {
-          AuthService.redirectToAfterLogin = $location.path();
-        }
-        console.log('/login');
-        $location.path('/login');
+    AuthService.requireLogin = function (callback) {
+      if (!AuthService.loggedInUser) {
+        AuthService.login_status(function(user){
+          AuthService.loggedInUser = user;
+          if(!user) {
+            NotifyService.showErrors(['Login required']);
+            if (!AuthService.redirectToAfterLogin) {
+              AuthService.redirectToAfterLogin = $location.path();
+            }
+            console.log('/login');
+            $location.path('/login');
+            callback(AuthService.loggedInUser)
+          }else{
+            callback(AuthService.loggedInUser);
+          }
+        });
       }
-      return AuthService.loggedInUserId;
+      callback(AuthService.loggedInUser);
     };
     //start by checking login status
     AuthService.login_status(function (result) {
-      AuthService.loggedInUserId = result.loggedInUserId;
-      $rootScope.$broadcast('auth.updateUserLoggedIn', result.loggedInUserId);
+      AuthService.loggedInUser = result.loggedInUser;
+      $rootScope.$broadcast('auth.updateUserLoggedIn', result.loggedInUser);
     });
     return AuthService;
   }
 
   function LogoutCtrl($rootScope, $location, AuthService, NotifyService) {
     $location.path('/home');
-    console.log('c');
+    console.log('logging out')
     AuthService.logout({}, function (result) {
       NotifyService.handleResponseMessages(result);
       if (result.success) {
-        AuthService.loggedInUserId = result.loggedInUserId;
-        $rootScope.$broadcast('auth.updateUserLoggedIn', result.loggedInUserId);
+        AuthService.loggedInUser = null;
+        $rootScope.$broadcast('auth.updateUserLoggedIn', result.loggedInUser);
       }
     });
   }
@@ -68,10 +76,9 @@
     $scope.submit = function () {
       AuthService.login({username: $scope.username, password: $scope.password}, function (result) {
         NotifyService.handleResponseMessages(result);
-        console.log(result);
         if (result.success) {
-          AuthService.loggedInUserId = result.loggedInUserId;
-          $rootScope.$broadcast('auth.updateUserLoggedIn', result.loggedInUserId);
+          AuthService.loggedInUser = result.user;
+          $rootScope.$broadcast('auth.updateUserLoggedIn', result.loggedInUser);
           if (AuthService.redirectToAfterLogin) {
             $location.path(AuthService.redirectToAfterLogin);
             AuthService.redirectToAfterLogin = null;

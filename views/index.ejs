@@ -26,7 +26,7 @@
 </head>
 <body style="display:none" ng-controller="AppCtrl" class="active-page-{{activePage}}" ng-class="{'show-sidebar': $rootScope.showSidebar}">
 <notify></notify>
-<div id="sidebar" class="pure-menu custom-restricted-width" ng-init="menu = [{heading:'Trading', items:['portfolio', 'trade']}, {heading:'Community', items:['ranking']}, {heading:'Account', items:['profile', 'logout']}]">
+<div id="sidebar" class="pure-menu custom-restricted-width" ng-init="menu = [{heading:'Trading', items:['portfolio', 'trade']}, {heading:'Community', items:['ranking']}, {heading:'Account', items:['logout']}]">
     <div ng-repeat="grouping in menu">
         <span class="pure-menu-heading">{{grouping.heading}}</span>
         <ul class="pure-menu-list">
@@ -38,7 +38,8 @@
     <div class="menu-button icon-menu" ng-click="$rootScope.showSidebar = !$rootScope.showSidebar"></div>
     <input type="text" ng-model="search" id="search-input" class="pure-input-1-2" placeholder="&#xE800 Quote Search"  style="font-family:fontello" />
 </div>
-<div id="content-frame">
+
+<div id="content-frame">Hello {{AuthService.loggedInUser}}
     <div ng-view class="content-area"></div>
 </div>
 

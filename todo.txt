@@ -1,1 +1,23 @@
+Phase 1 (fundementals):
+X Remove profile link
+x Put logout in protfolio page
+x Reloading site logs you out
+Redirect doesn't work to take you to login when you are required to log in.
+Home page should be an info page providing a login. When logged in home page should go to portfolio
+Make portfolio page show actual real amounts for the user
+Make portfolio page link to trade page
+Make trade page actually buy/sell stock
 
+Phase 2 (style tweaks):
+Search box needs to be resized when nav comes out
+Nav should have animation for coming out
+Make messages prettier and fade in / fade out
+Put logout icon on logout
+
+Phase 3 (Community):
+See global ranking
+Create a group / join a group
+See group ranking
+
+Phase 4 (nice to have):
+Check version number with server and throw an error on outdated versions.

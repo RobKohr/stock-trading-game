@@ -16,19 +16,22 @@ angular.module('myApp', [
     }]).
     controller('AppCtrl', ['$scope', '$http', '$rootScope', '$location', 'AuthService', '$timeout', function ($scope, $http, $rootScope, $location, AuthService, $timeout) {
 
-        function authUpdateInAppCtrl(scopeData, loggedInUserId){
+        function authUpdateInAppCtrl(scopeData, loggedInUser){
             var basePages = ['home', 'strategy', 'contact'];
             $scope.pages = basePages;
-            if((typeof(loggedInUserId)!='undefined') && (Number(loggedInUserId) > 0)){
+            if(typeof(loggedInUser)!='undefined'){
                 $scope.pages = basePages.concat(['logout']);
             }else{
                 $scope.pages = basePages.concat(['login']);
             }
-
         }
         $rootScope.$on('auth.updateUserLoggedIn', authUpdateInAppCtrl);
         authUpdateInAppCtrl(null, $rootScope.loggedInUserId);
-
+        $scope.AuthService = AuthService;
+        AuthService.login_status(function(result){
+            console.log('status', result);
+        })
+        console.log(AuthService.loggedInUser);
         $scope.location = $location;
         $scope.rootScope = $rootScope;
         $('body').show();

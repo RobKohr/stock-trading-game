@@ -32,7 +32,7 @@ function requiredField(req, res, field){
 exports._apiRequestValidator = function(req, res, next){
     var api_name = req.path.replace('/api/', '');
     var api_help = help[api_name];
-    if( (api_help.login_required) && (!req.session.username)){
+    if( (api_help.login_required) && (!req.session.user)){
         return res.json({success:false, error:'Login required', redirect:'/login'})
     }
     var errors = [];
@@ -113,9 +113,9 @@ exports['auth/register'] = function(req, res){
 
 help['auth/login'] = {required_fields:['username', 'password'], optional_fields:[], login_required:false, description:'Login as a user. Returns {success:true, username:username} for logged in user '};
 exports['auth/login'] = function(req, res){
-    var email = req.request.email,
+    var username = req.request.username,
         password = req.request.password;
-    email = email.toLowerCase();
+    username = username.toLowerCase();
 
     db.collection('users').findOne({_id:username}, function(err, user){
         if(err || !user){
@@ -125,19 +125,25 @@ exports['auth/login'] = function(req, res){
             if(!matched){
                 return res.json({success:false, error:'Login failure. Invalid password'});
             }else{
-                req.session.username = user._id;
                 delete user.password_hash; //so that isn't set in the json;
-                return res.json({success:true, message:'User logged in', username: user._id, user:user});
+                req.session.user = user;
+                return res.json({success:true, message:'User logged in', user:user});
             }
         });
 
     });
 };
 
+help['auth/logout'] = {required_fields:[], optional_fields:[], login_required:false, description:'Destroys user session'};
+exports['auth/logout'] = function(req, res){
+    req.session.user = null;
+    return res.json({success:true, message:'User logged out'})
+}
+
 help['auth/login_status'] = {required_fields:[], optional_fields:[], login_required:false, description:'returns {success:true, username:username} if user is logged in'};
 exports['auth/login_status'] = function(req, res){
-    if(req.session.username) {
-        res.json({success:true, username: req.session.username})
+    if(req.session.user) {
+        res.json({success:true, user: req.session.user})
     }else{
         res.json({success:false});
     }
@@ -150,7 +156,7 @@ exports['auth/logged_in_user'] = function(req, res){
 };
 
 function getLoggedInUser(req, res, callback){
-    db.collection('users').findOne({_id:req.session.username}, function(err, user){
+    db.collection('users').findOne({_id:req.session.user}, function(err, user){
         if(err || !user){
             return res.json({success:false, error:'No user found: '+ username});
         }

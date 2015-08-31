@@ -25,21 +25,27 @@ angularModules.push(moduleName);
     }
 
     function PortfolioCtrl($scope, AuthService,  PortfolioService, NotifyService) {
-        if(!AuthService.requireLogin()) return;
-        $scope.tableData = [];
-        $scope.skippedFields = ['$$hashKey'];
+        AuthService.requireLogin(function(user) {
+            if(!user){
+                console.log('NO USER');
+                return;
+            }
 
-        $scope.formatters = {
-            'date': function (str) {
-                return moment(str).format('MM/DD/YYYY')
-            }
-        };
-        PortfolioService.stock_positions(function (result) {
-            if (!result) return;
-            if (NotifyService.handleResponseMessages(result)) {
-                console.log('b', result);
-                $scope.tableData = result.data;
-            }
+            $scope.tableData = [];
+            $scope.skippedFields = ['$$hashKey'];
+
+            $scope.formatters = {
+                'date': function (str) {
+                    return moment(str).format('MM/DD/YYYY')
+                }
+            };
+            PortfolioService.stock_positions(function (result) {
+                if (!result) return;
+                if (NotifyService.handleResponseMessages(result)) {
+                    console.log('b', result);
+                    $scope.tableData = result.data;
+                }
+            });
         });
     }
 }());
