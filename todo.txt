@@ -1,7 +1,8 @@
-Phase 1 (fundementals):
-X Remove profile link
-x Put logout in protfolio page
-x Reloading site logs you out
+Phase 1 (fundementals):  (dates are dates of committed code)
+X Remove profile link 8/31/15
+x Put logout in protfolio page 8/31
+x Reloading site logs you out 8/31
+User isn't what is being assigned to the auth user. It is being assigned to the result.
 Redirect doesn't work to take you to login when you are required to log in.
 Home page should be an info page providing a login. When logged in home page should go to portfolio
 Make portfolio page show actual real amounts for the user
