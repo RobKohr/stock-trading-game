@@ -34,9 +34,10 @@
 
     AuthService.requireLogin = function (callback) {
       if (!AuthService.loggedInUser) {
-        AuthService.login_status(function(user){
-          AuthService.loggedInUser = user;
-          if(!user) {
+        AuthService.login_status(function(result){
+          AuthService.loggedInUser = result.user;
+
+          if(!AuthService.loggedInUser) {
             NotifyService.showErrors(['Login required']);
             if (!AuthService.redirectToAfterLogin) {
               AuthService.redirectToAfterLogin = $location.path();

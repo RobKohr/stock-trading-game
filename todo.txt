@@ -2,8 +2,12 @@ Phase 1 (fundementals):  (dates are dates of committed code)
 X Remove profile link 8/31/15
 x Put logout in protfolio page 8/31
 x Reloading site logs you out 8/31
-User isn't what is being assigned to the auth user. It is being assigned to the result.
-Redirect doesn't work to take you to login when you are required to log in.
+x Create a pending buy to be processed after a delay
+X User isn't what is being assigned to the auth user. It is being assigned to the result.
+X Redirect doesn't work to take you to login when you are required to log in.
+Process pending buy order
+Create a pending sell to be processed after a delay
+Process pending sell order
 Home page should be an info page providing a login. When logged in home page should go to portfolio
 Make portfolio page show actual real amounts for the user
 Make portfolio page link to trade page

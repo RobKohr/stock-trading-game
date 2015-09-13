@@ -156,11 +156,57 @@ exports['auth/logged_in_user'] = function(req, res){
 };
 
 function getLoggedInUser(req, res, callback){
-    db.collection('users').findOne({_id:req.session.user}, function(err, user){
+    db.collection('users').findOne({_id:req.session.user._id}, function(err, user){
         if(err || !user){
-            return res.json({success:false, error:'No user found: '+ username});
+            return res.json({success:false, error:'No user found:'+req.session.user._id});
         }
         delete user.password_hash;
         return callback(user);
     });
 }
+var stocks = [
+    {ticker:'APPL', price:32.44, delay:15},
+    {ticker:'MSN', price:12.22, delay:15},
+    {ticker:'TOYT', price:10.37, delay:30}
+];
+help['stock/search'] =  {required_fields:['q'], optional_fields:[], login_required:false, description:'finds stocks and their prices by search terms'}
+exports['stock/search'] = function stockSearch(req, res){
+    var out = stocks;
+    res.json(out);
+};
+
+help['stock/quote'] = {required_fields:['ticker'], optional_fields:[], login_required:false, description:'Get stock info including price and delay'};
+exports['stock/quote'] = function stockPrice(req, res){
+    getStockQuote(req.request['ticker'], function(stock){
+        res.json(stock);
+    });
+};
+
+function getStockQuote(ticker, callback){
+    var out = null;
+    stocks.forEach(function(stock){
+        if(stock.ticker == ticker){
+            out = stock;
+        }
+    });
+    callback(out);
+}
+
+
+help['stock/buy'] = {required_fields:['ticker', 'dollar_amount', 'quantity'], optional_fields:[], login_required:true, description:'Buy as many stocks as you can for x dollars up to a certain quantity. Delayed 15 min'};
+exports['stock/buy'] = function stockBuy(req, res){
+    var ticker = req.request['ticker'];
+    getStockQuote(ticker, function(stock){
+        getLoggedInUser(req, res, function(user){
+            var delay = stock.delay * 60 * 1000; //convert minutes to microseconds
+            var now = new Date();
+            var completes = new Date(now+delay);
+            var pending_transaction = {completes:completes, user_id:user._id, dollar_amount:req.request.dollar_amount, quantity:req.request.quantity };
+            db.collection('pending_buys').insertOne(pending_transaction);
+            res.json({success:true, delay:stock.delay, transaction:pending_transaction});
+        });
+    });
+};
+
+
+help['stock/sell'] = {required_fields:['ticker', 'quantity'], optional_fields:[], login_required:true, description:'Sell this many stocks. Delayed 15 min'}
