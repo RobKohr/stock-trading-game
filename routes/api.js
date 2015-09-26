@@ -165,8 +165,8 @@ function getLoggedInUser(req, res, callback){
     });
 }
 var stocks = [
-    {ticker:'APPL', price:32.44, delay:15},
-    {ticker:'MSN', price:12.22, delay:15},
+    {ticker:'APPL', price:32.44, delay:0.25},
+    {ticker:'MSN', price:12.22, delay:0.25},
     {ticker:'TOYT', price:10.37, delay:30}
 ];
 help['stock/search'] =  {required_fields:['q'], optional_fields:[], login_required:false, description:'finds stocks and their prices by search terms'}
@@ -192,26 +192,38 @@ function getStockQuote(ticker, callback){
     callback(out);
 }
 
-
-help['stock/buy'] = {required_fields:['ticker', 'dollar_amount', 'quantity'], optional_fields:[], login_required:true, description:'Buy as many stocks as you can for x dollars up to a certain quantity. Delayed 15 min'};
-exports['stock/buy'] = function stockBuy(req, res){
+function createBuyOrSell(req, res, type){
     var ticker = req.request['ticker'];
     getStockQuote(ticker, function(stock){
         getLoggedInUser(req, res, function(user){
             var delay = stock.delay * 60 * 1000; //convert minutes to microseconds
             var now = new Date();
             var completes = new Date(now.getTime() + delay);
-            var pending_transaction = {completes:completes, user_id:user._id, dollar_amount:req.request.dollar_amount, quantity:req.request.quantity, ticker:ticker };
-            db.collection('pending_buys').insertOne(pending_transaction);
-            res.json({success:true, delay:stock.delay, transaction:pending_transaction});
+            var pending_transaction = {completes:completes, user_id:user._id, quantity:Number(req.request.quantity), ticker:ticker };
+            if(type=='buy'){
+                //buy orders have an upper limit of expected dollar amount.
+                pending_transaction.dollar_amount = Number(req.request.dollar_amount);
+            }
+            db.collection('pending_'+type+'s').insertOne(pending_transaction);
+            res.json({success:true, delay:stock.delay, transaction:pending_transaction, type:type});
         });
     });
+}
+
+help['stock/buy'] = {required_fields:['ticker', 'dollar_amount', 'quantity'], optional_fields:[], login_required:true, description:'Buy as many stocks as you can for x dollars up to a certain quantity. Delayed 15 min'};
+exports['stock/buy'] = function stockBuy(req, res){
+    createBuyOrSell(req, res, 'buy');
+};
+
+help['stock/sell'] = {required_fields:['ticker', 'quantity'], optional_fields:[], login_required:true, description:'Sell stocks. Delayed 15 min'};
+exports['stock/sell'] = function stockSell(req, res){
+    createBuyOrSell(req, res, 'sell');
 };
 
 function updateUserBalances(user, andSave){
     user.balance = user.income = getCurrentIncome();
     if(!user.transactions) user.transactions = [];
-    if(!user.portfolio) user.portfolio = {};
+    user.portfolio = {};
 
     user.transactions.forEach(function(transaction){
         user.balance += transaction.cash_change;
@@ -226,6 +238,7 @@ function updateUserBalances(user, andSave){
     }
     return user;
 }
+
 //returns total money earned since Jan 1, 2015 with $1000 earned every 7 days
 function getCurrentIncome(){
     var start = new Date("Jan 1, 2015");
@@ -244,8 +257,6 @@ function processPendingBuys(){
             console.log('Error getting pending buys in processPendingBuys', err);
             return setTimeout(processPendingBuys, 1000);
         }
-        console.log(buys);
-        console.log(getCurrentIncome());
         for(var i = 0; i < buys.length; i++){
             var buy = buys[i];
             db.collection('pending_buys').remove({_id:buy._id});
@@ -263,6 +274,7 @@ function processPendingBuys(){
                         if(quantity > buy.quantity){
                             quantity = buy.quantity;
                         }
+
                         var transaction = {
                             cash_change: -quantity * quote.price,
                             ticker: buy.ticker,
@@ -283,10 +295,59 @@ function processPendingBuys(){
                 })
             })
         }
-
-        setTimeout(processPendingBuys, 2000);
+        setTimeout(processPendingBuys, 1000);
     })
-
 }
+
+
+setTimeout(processPendingSells, 1500);
+function processPendingSells(){
+    db.collection('pending_sells').find({completes:{$lt:new Date()}}).toArray(function(err, records){
+        if(err){
+            console.log('Error getting pending records in processPendingSells', err);
+            return setTimeout(processPendingSells, 1000);
+        }
+        for(var i = 0; i < records.length; i++){
+            var sell = records[i];
+            db.collection('pending_sells').remove({_id:sell._id});
+            getStockQuote(sell.ticker, function(quote){
+                db.collection('users').findOne({_id:sell.user_id}, function(err, user){
+                    if(err){
+                        return console.log('Error finding user in processPendingSells', err);
+                    }
+                    if(user){
+                        if(!user.transactions){
+                            user.transactions = [];
+                        }
+                        var user = updateUserBalances(user);
+                        var quantity = sell.quantity;
+                        var transaction = {
+                            cash_change: quantity * quote.price,
+                            ticker: sell.ticker,
+                            stock_change: -quantity
+                        };
+                        if(quantity > user.portfolio[sell.ticker].quantity){
+                            if(!user.messages) user.messages = [];
+                            transaction.balance = user.balance;
+                            transaction.stocks_in_portfolio_available = user.portfolio[sell.ticker].quantity;
+                            transaction.user_id = user._id;
+                            var message = 'Failed trying to sell :' + JSON.stringify(transaction);
+                            user.messages.push();
+                            return message; //return, so don't add transaction to user
+                        }
+                        user.transactions.push(transaction);
+                        var user = updateUserBalances(user, true);
+                        console.log(user);
+                    }
+                })
+            })
+        }
+        setTimeout(processPendingSells, 1000);
+    })
+}
+
+
+
+
 
 help['stock/sell'] = {required_fields:['ticker', 'quantity'], optional_fields:[], login_required:true, description:'Sell this many stocks. Delayed 15 min'}
