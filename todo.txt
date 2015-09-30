@@ -8,7 +8,7 @@ X Redirect doesn't work to take you to login when you are required to log in.
 X Process pending buy order
 x Create a pending sell to be processed after a delay
 X Process pending sell order
-Have actual stock quotes rather than simulated ones
+x Have actual stock quotes rather than simulated ones
 Make trade page actually buy/sell stock
 Home page should be an info page providing a login. When logged in home page should go to portfolio
 Make portfolio page show actual real amounts for the user

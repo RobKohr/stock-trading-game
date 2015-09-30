@@ -111,6 +111,7 @@ exports['auth/register'] = function(req, res){
 };
 
 
+
 help['auth/login'] = {required_fields:['username', 'password'], optional_fields:[], login_required:false, description:'Login as a user. Returns {success:true, username:username} for logged in user '};
 exports['auth/login'] = function(req, res){
     var username = req.request.username,
@@ -177,19 +178,49 @@ exports['stock/search'] = function stockSearch(req, res){
 
 help['stock/quote'] = {required_fields:['ticker'], optional_fields:[], login_required:false, description:'Get stock info including price and delay'};
 exports['stock/quote'] = function stockPrice(req, res){
-    getStockQuote(req.request['ticker'], function(stock){
-        res.json(stock);
+    getStockQuote(req.request['ticker'], function(stock, err){
+        if(err){
+            res.json({error:err});
+        } else {
+            res.json(stock);
+        }
     });
 };
 
+var http = require('http');
 function getStockQuote(ticker, callback){
-    var out = null;
-    stocks.forEach(function(stock){
-        if(stock.ticker == ticker){
-            out = stock;
-        }
+    ticker = ticker.toUpperCase();
+    if (!ticker.match(/^[0-9A-Z]+$/)) {
+        return callback(null, {message:'Invalid ticker'});
+    }
+
+
+    var options = {
+        host: 'download.finance.yahoo.com',
+        port: 80,
+        path: '/d/quotes.csv?s='+ticker+'&f=snabxj2'
+    };
+    http.get(options, function(resp){
+        resp.setEncoding('utf8');
+        resp.on('data', function(data){
+            data = data.split(',');
+            var labels = ['symbol', 'name', 'ask', 'bid', 'exchange', 'outstanding_shares'];
+            var isNumber = {ask:1, bid:1, outstanding_shares:1};
+            var out = {};
+            labels.forEach(function(label, index){
+                var val = data[index].replace(/"/g, '').replace(/\n/g, '');
+                if(isNumber[label]){
+                    val = Number(val);
+                }
+                out.delay = 0.25;
+                out[label] = val;
+            })
+            return callback(out, null);
+        });
+    }).on("error", function(e){
+        return callback(null, {message:'Error making request'});
     });
-    callback(out);
+
 }
 
 function createBuyOrSell(req, res, type){
@@ -270,17 +301,17 @@ function processPendingBuys(){
                             user.transactions = [];
                         }
                         var user = updateUserBalances(user);
-                        var quantity = Math.floor(buy.dollar_amount / quote.price);
+                        var quantity = Math.floor(buy.dollar_amount / quote.ask);
                         if(quantity > buy.quantity){
                             quantity = buy.quantity;
                         }
 
                         var transaction = {
-                            cash_change: -quantity * quote.price,
+                            cash_change: -quantity * quote.ask,
                             ticker: buy.ticker,
                             stock_change: quantity
                         };
-                        if(quantity * quote.price > user.balance){
+                        if(quantity * quote.ask > user.balance){
                             if(!user.messages) user.messages = [];
                             transaction.balance = user.balance;
                             transaction.user_id = user._id;
@@ -322,7 +353,7 @@ function processPendingSells(){
                         var user = updateUserBalances(user);
                         var quantity = sell.quantity;
                         var transaction = {
-                            cash_change: quantity * quote.price,
+                            cash_change: quantity * quote.bid,
                             ticker: sell.ticker,
                             stock_change: -quantity
                         };
