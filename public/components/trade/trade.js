@@ -25,3 +25,5 @@ angular.module(moduleName, []).
         $scope.transaction_type = 'buy';
         $scope.max_amount = 100;
     }]);
+
+

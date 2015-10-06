@@ -38,7 +38,6 @@ angular.module(moduleName, []).
 
     }).
     filter('capitalize', function () {
-
       return function (input) {
         if (input) {
           input = input.toLowerCase();
@@ -48,7 +47,6 @@ angular.module(moduleName, []).
 
     }).
     filter('camelCaseToSpaces', function() {
-
       return function(input) {
         return input
           // insert a space before all caps

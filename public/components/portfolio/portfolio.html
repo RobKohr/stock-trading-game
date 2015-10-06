@@ -2,11 +2,28 @@
     <a href="/logout">Logout</a>
 </div>
 
-<h3>Your Portfolio</h3>
-<h4>Cash</h4>
-$2,000,000
-<h4>Weekly Income</h4>
-$1,000
+<table class="array-data-table data-table striped">
+    <tr>
+        <th>Cash</th>
+        <th>Weekly</th>
+        <th>Total income so far</th>
+    </tr>
+    <tr>
+        <td>
+            {{cash | currency}}
+        </td>
+        <td>
+            {{weekly_income | currency}}
+        </td>
+        <td>
+            {{total_income | currency}}
+        </td>
+    </tr>
+</table>
+
 
 <h4>Stock Positions</h4>
-<formatted-table table-data="tableData" skipped-fields="skippedFields" formatters="formatters"></formatted-table>
+<formatted-table table-data="positions" skipped-fields="skippedFields" formatters="formatters"></formatted-table>
+
+<h4>Transaction History</h4>
+<formatted-table table-data="transactions" skipped-fields="skippedFields" formatters="formatters"></formatted-table>

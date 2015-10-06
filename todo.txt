@@ -11,7 +11,7 @@ X Process pending sell order
 x Have actual stock quotes rather than simulated ones
 Make trade page actually buy/sell stock
 Home page should be an info page providing a login. When logged in home page should go to portfolio
-Make portfolio page show actual real amounts for the user
+x Make portfolio page show actual real amounts for the user
 Make portfolio page link to trade page
 Make it so you are not logged out when the server restarts
 

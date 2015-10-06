@@ -31,6 +31,7 @@ function requiredField(req, res, field){
 // Middleware that will throw errors using the "help" object's required_fields and login_required properties
 exports._apiRequestValidator = function(req, res, next){
     var api_name = req.path.replace('/api/', '');
+    console.log('api name!', api_name)
     var api_help = help[api_name];
     if( (api_help.login_required) && (!req.session.user)){
         return res.json({success:false, error:'Login required', redirect:'/login'})
@@ -56,31 +57,11 @@ exports['help'] = function(req, res){
 };
 
 
-//App api paths (exports[PATH_NAME] -> domain.com/api/PATH_NAME)
-help['stock_positions'] = {required_fields:[], optional_fields:[], login_required:true, description:'{data:[array of stocks owned by logged in user]}'};
-exports['stock_positions'] = function(req, res){
-    var data = [
-        {stock:'APPL', price:391.23, change_dollars:-23.13, change_percent:-.04, shares:30420, value:93232231.33},
-        {stock:'MSN', price:391.23, change_dollars:-23.13, change_percent:-.04, shares:30420, value:93232231.33},
-        {stock:'GE', price:391.23, change_dollars:-23.13, change_percent:-.04, shares:30420, value:93232231.33},
-    ];
-    return res.json({success:true, data:data});
-};
 help['funds'] = {required_fields:[], optional_fields:[], login_required:true, description:'get users current funds'};
 exports['funds'] = function(req, res){
     getLoggedInUser(req, res, function(user){
 
     });
-};
-
-help['trade/buy'] = {required_fields:['stock', 'total_value'], optional_fields:[], login_required:true, description:'Purchase stocks up to a specific value'};
-exports['trade/buy'] = function(req, res){
-    return res.json({success:true});
-};
-
-help['trade/sell'] = {required_fields:['stock', 'quantity'], optional_fields:[], login_required:true, description:'Sell a certain number of stocks'};
-exports['trade/sell'] = function(res, res){
-    return res.json({success:true});
 };
 
 // AUTH
@@ -223,11 +204,23 @@ function getStockQuote(ticker, callback){
 
 }
 
+//App api paths (exports[PATH_NAME] -> domain.com/api/PATH_NAME)
+help['stock/positions'] = {required_fields:[], optional_fields:[], login_required:true, description:'{data:[array of stocks owned by logged in user]}'};
+exports['stock/positions'] = function(req, res){
+    getLoggedInUser(req, res, function(user){
+        var user = updateUserBalances(user, true);
+        return res.json({success:true, data:user});
+    });
+};
+
+
+
 function createBuyOrSell(req, res, type){
     var ticker = req.request['ticker'];
     getStockQuote(ticker, function(stock){
         getLoggedInUser(req, res, function(user){
             var delay = stock.delay * 60 * 1000; //convert minutes to microseconds
+            delay = 15*1000; //for testing delay is just 15 seconds.
             var now = new Date();
             var completes = new Date(now.getTime() + delay);
             var pending_transaction = {completes:completes, user_id:user._id, quantity:Number(req.request.quantity), ticker:ticker };
@@ -265,7 +258,7 @@ function updateUserBalances(user, andSave){
         user.portfolio[ticker] = position;
     });
     if(andSave){
-        db.collection('users').save(user, function(){});
+        db.collection('users').update({_id:user._id}, {$set:user}, function(){});
     }
     return user;
 }
@@ -309,8 +302,10 @@ function processPendingBuys(){
                         var transaction = {
                             cash_change: -quantity * quote.ask,
                             ticker: buy.ticker,
-                            stock_change: quantity
+                            stock_change: quantity,
+                            timestamp: new Date()
                         };
+
                         if(quantity * quote.ask > user.balance){
                             if(!user.messages) user.messages = [];
                             transaction.balance = user.balance;

@@ -20,7 +20,7 @@ angularModules.push(moduleName);
 
     function PortfolioService(ResourceHelperService) {
         return ResourceHelperService.createResources({
-            stock_positions: {url: '/api/stock_positions', method: 'GET'}
+            stock_positions: {url: '/api/stock/positions', method: 'GET'}
         })
     }
 
@@ -37,14 +37,25 @@ angularModules.push(moduleName);
             $scope.formatters = {
                 'date': function (str) {
                     return moment(str).format('MM/DD/YYYY')
+                },
+                'cash_change': function(num){
+                    return Math.round(num*100)/100;
                 }
             };
             PortfolioService.stock_positions(function (result) {
-                if (!result) return;
-                if (NotifyService.handleResponseMessages(result)) {
-                    console.log('b', result);
-                    $scope.tableData = result.data;
+                var data = result.data;
+                console.log(data);
+                $scope.cash = data.balance;
+                $scope.total_income = data.income;
+                $scope.weekly_income = 1000;
+                $scope.positions = [];
+                for(var ticker in data.portfolio){
+                    var pos = data.portfolio[ticker];
+                    pos.ticker = ticker;
+                    $scope.positions.push(pos);
                 }
+                console.log($scope.positions, 'pos')
+                $scope.transactions = data.transactions;
             });
         });
     }
