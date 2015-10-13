@@ -1,22 +1,21 @@
 /*
  * Serve JSON to our AngularJS client
  */
-var package_obj = require('../package.json');
 var bcrypt = require('bcrypt');
-var MongoClient = require('mongodb').MongoClient
-    , assert = require('assert');
+var assert = require('assert');
 
 var db = null;
-// Connection URL
-var url = 'mongodb://localhost:27017/'+package_obj.name;
-// Use connect method to connect to the Server
-MongoClient.connect(url, function(err, db_ptr) {
-    if(err){
-        return console.log('Error starting mongodb', package_obj.name, err);
+exports.db = {};
+setTimeout(assignInitializedDb, 200);
+function assignInitializedDb(){
+    if(exports.db.collection){
+        db = exports.db;
+    }else{
+        //db not initialized yet...try again soon
+        setTimeout(assignInitializedDb, 200);
     }
-    console.log("Mongo db connection started. DB = "+package_obj.name);
-    db = db_ptr;
-});
+}
+
 
 
 // Helper functions
@@ -174,8 +173,6 @@ function getStockQuote(ticker, callback){
     if (!ticker.match(/^[0-9A-Z]+$/)) {
         return callback(null, {message:'Invalid ticker'});
     }
-
-
     var options = {
         host: 'download.finance.yahoo.com',
         port: 80,
@@ -276,6 +273,9 @@ function getCurrentIncome(){
 
 setTimeout(processPendingBuys, 2000);
 function processPendingBuys(){
+    if(!db.collection){
+        return setTimeout(processPendingBuys, 1000);
+    }
     db.collection('pending_buys').find({completes:{$lt:new Date()}}).toArray(function(err, buys){
         if(err){
             console.log('Error getting pending buys in processPendingBuys', err);
@@ -328,6 +328,9 @@ function processPendingBuys(){
 
 setTimeout(processPendingSells, 1500);
 function processPendingSells(){
+    if(!db.collection){
+        return setTimeout(processPendingSells, 1000);
+    }
     db.collection('pending_sells').find({completes:{$lt:new Date()}}).toArray(function(err, records){
         if(err){
             console.log('Error getting pending records in processPendingSells', err);
