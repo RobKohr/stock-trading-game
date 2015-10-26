@@ -8,12 +8,13 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     session = require('express-session'),
-    fs = require('fs'),
     compress = require('compression'),
-    local_config = require('./local.conf.json');
-
+    local_config = require('./local.conf.json'),
+    MongoClient = require('mongodb').MongoClient;
 /* app setup */
 var app = module.exports = express();
+
+
 
 /**
  * Configuration
@@ -21,6 +22,16 @@ var app = module.exports = express();
 
 // all environments
 app.use(session({secret: local_config.secret}));
+var package_obj = require('./package.json');
+var mongo_url = 'mongodb://localhost:27017/'+package_obj.name;
+
+var MongoDBStore = require('connect-mongodb-session')(session);
+var store = new MongoDBStore(
+    {
+        uri: mongo_url,
+        collection: 'mySessions'
+    });
+
 app.use(compress());
 app.set('port', local_config.port || process.env.PORT || 80);
 app.set('views', __dirname + '/views');
@@ -82,8 +93,10 @@ function mergeGetPost(req, res, next){
 // JSON APIs
 for(var key in api){
     if(key.charAt(0)!='_') {
-        app.get('/api/' + key, mergeGetPost, api._apiRequestValidator, api[key]);
-        app.post('/api/' + key, mergeGetPost, api._apiRequestValidator, api[key]);
+        if(typeof(api[key])=='function') {
+            app.get('/api/' + key, mergeGetPost, api._apiRequestValidator, api[key]);
+            app.post('/api/' + key, mergeGetPost, api._apiRequestValidator, api[key]);
+        }
     }
 }
 
@@ -104,3 +117,23 @@ var connection = http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
 
+
+
+
+// Connection URL
+// Use connect method to connect to the Server
+MongoClient.connect(mongo_url, function(err, db_ptr) {
+    if(err){
+        return console.log('Error starting mongodb', package_obj.name, err);
+    }
+    console.log("Mongo db connection started. DB = "+package_obj.name);
+    api.db = db = db_ptr;
+/*    app.use(session({
+        secret: local_config.secret,
+        resave: false,
+        saveUninitialized: false,
+        store: new MongoStore({ db: db }),
+        ttl: 14 * 24 * 60 * 60, // = 14 days. Default
+        autoRemove: 'native' // Default
+    }));*/
+});

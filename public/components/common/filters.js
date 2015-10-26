@@ -3,6 +3,19 @@
 var moduleName = 'common.filters';
 angularModules.push(moduleName);
 angular.module(moduleName, []).
+  //takes a filter as an argument so you can dynamically pass filters to templates
+    filter('filter', function($interpolate ){
+      return function(){
+        var result = $interpolate('{{value | ' + arguments[1] + '}}');
+        return result({value:arguments[0]});
+      };
+    }).
+    filter("trustHTML", ['$sce', function trustHTML($sce) {
+      return function (htmlCode) {
+        htmlCode = String(htmlCode);
+        return $sce.trustAsHtml(htmlCode);
+      };
+    }]).
     filter('interpolate', function (version) {
       return function (text) {
         return String(text).replace(/\%VERSION\%/mg, version);

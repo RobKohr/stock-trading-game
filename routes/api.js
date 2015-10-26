@@ -273,7 +273,7 @@ function getCurrentIncome(){
 
 setTimeout(processPendingBuys, 2000);
 function processPendingBuys(){
-    if(!db.collection){
+    if(!db || !db.collection){
         return setTimeout(processPendingBuys, 1000);
     }
     db.collection('pending_buys').find({completes:{$lt:new Date()}}).toArray(function(err, buys){
@@ -328,7 +328,7 @@ function processPendingBuys(){
 
 setTimeout(processPendingSells, 1500);
 function processPendingSells(){
-    if(!db.collection){
+    if(!db || !db.collection){
         return setTimeout(processPendingSells, 1000);
     }
     db.collection('pending_sells').find({completes:{$lt:new Date()}}).toArray(function(err, records){

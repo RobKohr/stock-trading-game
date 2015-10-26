@@ -1,12 +1,13 @@
 <table class="array-data-table data-table striped">
     <tbody>
-    <tr ng-if="tableData.length" ng-init="row = tableData[0]" >
-        <th ng-repeat="key in row | keepSorted" ng-if="skippedFields.indexOf(key)==-1">{{key | camelCaseToSpaces}}</th>
+    <tr>
+        <th ng-repeat="column in columns">{{column.label}}</th>
     </tr>
     <tr ng-repeat="row in tableData">
-        <td ng-repeat="key in row | keepSorted" ng-init="val=row[key]" ng-if="skippedFields.indexOf(key)==-1">
-            <span ng-if="formatters[key]">{{formatters[key](val)}}</span>
-            <span ng-if="!formatters[key]">{{val}}</span>
+        <td ng-repeat="column in columns" ng-init="value = row[column.key]">
+            <span ng-if="column.template" ng-include="column.template"></span>
+            <span ng-if="!column.template && column.filter">{{value | filter:column.filter}}</span>
+            <span ng-if="!column.template && !column.filter">{{value}}</span>
         </td>
     </tr>
     </tbody>

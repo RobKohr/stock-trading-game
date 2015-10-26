@@ -34,14 +34,35 @@ angularModules.push(moduleName);
             $scope.tableData = [];
             $scope.skippedFields = ['$$hashKey'];
 
-            $scope.formatters = {
-                'date': function (str) {
-                    return moment(str).format('MM/DD/YYYY')
+            $scope.positions_columns = [
+                {
+                    key: 'quantity',
+                    label: 'Quantity',
+                    filter: 'currency : "" : 0'
                 },
-                'cash_change': function(num){
-                    return Math.round(num*100)/100;
+                {
+                    key:'ticker',
+                    label: 'Ticker',
+                    template: 'components/portfolio/column_ticker.html'
                 }
-            };
+            ];
+            $scope.transactions_columns = [
+                {
+                    key:'cash_change',
+                    label: 'Cash Change',
+                    filter: 'currency : $ : 2'
+                },
+                {
+                    key:'stock_change',
+                    label:'Stock Change'
+                },
+                {
+                    key:'ticker',
+                    label: 'Ticker',
+                    template: 'components/portfolio/column_ticker.html'
+                }
+            ];
+
             PortfolioService.stock_positions(function (result) {
                 var data = result.data;
                 console.log(data);
@@ -56,6 +77,7 @@ angularModules.push(moduleName);
                 }
                 console.log($scope.positions, 'pos')
                 $scope.transactions = data.transactions;
+                console.log(data.transactions)
             });
         });
     }

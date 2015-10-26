@@ -27,8 +27,7 @@
       login_status: {url: '/api/auth/login_status', method: 'GET'},
       login: {url: '/api/auth/login'},
       logout: {url: '/api/auth/logout'},
-      register: {url: '/api/auth/register'},
-      getUserFromToken: {url: '/api/auth/user_from_token'}
+      register: {url: '/api/auth/register'}
     });
     AuthService.loggedInUser = null;
 

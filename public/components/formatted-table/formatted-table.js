@@ -10,14 +10,13 @@ angular.module(moduleName, []).
             templateUrl: '/components/formatted-table/formatted-table.html',
             scope : {
                 tableData: '=',
-                skippedFields: '=',
-                formatters: '='
+                columns: '=' //this is an array of columns with column data
             },
             link: function (scope, elem, attrs) {
-                console.log('here');
                 if(!scope.formatters) scope.formatters = {};
                 if(!scope.skippedFields) scope.skippedFields = [];
                 scope.skippedFields.push('$$hashKey');
+
             }
         };
     }]);
