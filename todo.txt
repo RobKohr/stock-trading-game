@@ -10,11 +10,11 @@ x Create a pending sell to be processed after a delay
 X Process pending sell order
 x Have actual stock quotes rather than simulated ones
 x Fix link to stocks
+x Make it so you are not logged out when the server restarts
 Make trade page actually buy/sell stock
 Home page should be an info page providing a login. When logged in home page should go to portfolio
 x Make portfolio page show actual real amounts for the user
 Make portfolio page link to trade page
-Make it so you are not logged out when the server restarts
 
 Phase 2 (style tweaks):
 angular animate?

@@ -107,11 +107,10 @@ exports['auth/login'] = function(req, res){
                 return res.json({success:false, error:'Login failure. Invalid password'});
             }else{
                 delete user.password_hash; //so that isn't set in the json;
-                req.session.user = user;
+                req.session.user = {_id:user._id};
                 return res.json({success:true, message:'User logged in', user:user});
             }
         });
-
     });
 };
 

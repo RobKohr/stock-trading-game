@@ -8,29 +8,24 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     session = require('express-session'),
+    MongoStore = require('connect-mongo')(session),
     compress = require('compression'),
     local_config = require('./local.conf.json'),
     MongoClient = require('mongodb').MongoClient;
 /* app setup */
 var app = module.exports = express();
 
-
-
 /**
  * Configuration
  */
 
-// all environments
-app.use(session({secret: local_config.secret}));
 var package_obj = require('./package.json');
 var mongo_url = 'mongodb://localhost:27017/'+package_obj.name;
 
-var MongoDBStore = require('connect-mongodb-session')(session);
-var store = new MongoDBStore(
-    {
-        uri: mongo_url,
-        collection: 'mySessions'
-    });
+app.use(session({
+    secret: local_config.secret,
+    store: new MongoStore({ url: mongo_url })
+}));
 
 app.use(compress());
 app.set('port', local_config.port || process.env.PORT || 80);
@@ -128,12 +123,4 @@ MongoClient.connect(mongo_url, function(err, db_ptr) {
     }
     console.log("Mongo db connection started. DB = "+package_obj.name);
     api.db = db = db_ptr;
-/*    app.use(session({
-        secret: local_config.secret,
-        resave: false,
-        saveUninitialized: false,
-        store: new MongoStore({ db: db }),
-        ttl: 14 * 24 * 60 * 60, // = 14 days. Default
-        autoRemove: 'native' // Default
-    }));*/
 });
